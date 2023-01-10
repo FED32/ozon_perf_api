@@ -11,7 +11,7 @@ services:
       - /home/get/logs_all//ozon_performance_ecom_api/:/app/logs/
 
   nginx:
-    container_name: ozon-performance-ecom-api
+    container_name: nginx-ozon-performance-ecom-api
     build:
       context: ./nginx
       dockerfile: Dockerfile
