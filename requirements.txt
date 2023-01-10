@@ -6,3 +6,4 @@ pandas~=1.5.2
 numpy~=1.24.1
 psycopg2~=2.9.5
 SQLAlchemy~=1.4.46
+gunicorn
