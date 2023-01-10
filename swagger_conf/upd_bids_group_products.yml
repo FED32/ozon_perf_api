@@ -1,0 +1,51 @@
+swagger: "2.0"
+info:
+  title: "Ozon Performance API Documentation"
+  contact:
+    email: "s.fedyushin@ecomru.ru"
+  basePath: "/swagger"
+paths:
+  "/ozonperformance/updgroupproducts":
+    post:
+tags:
+  - product
+    - edit
+summary: "Обновление ставок товаров в группах с размещением на страницах каталога и поиска"
+description: "Метод для обновления ставок товаров в группах с размещением на страницах каталога и поиска"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  required: true
+  schema:
+    type: "object"
+    properties:
+      client_id:
+        type: "string"
+        example: "123456-7890123456@advertising.performance.ozon.ru"
+      client_secret:
+        type: "string"
+        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+      campaign_id:
+        type: "string"
+        example: "1234567"
+      sku_list:
+        type: "array"
+        example: [ "1234567890", "0987654321" ]
+        description: SKU товаров
+      bids_list:
+        type: "array"
+        example: [ "100000000", "200000000" ]
+        description: ставки товаров
+      groups_list:
+        type: "array"
+        example: [ "123456", "7890123" ]
+        description: список id групп
+responses:
+  200:
+    description: "OK"
+  400:
+    description: "Bad Request"

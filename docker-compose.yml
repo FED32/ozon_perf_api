@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    environment:
+      TZ: Europe/Moscow
+    command: sh script.sh
+    volumes:
+      - /home/get/logs_all//ozon_performance_ecom_api/:/app/logs/
+
+
