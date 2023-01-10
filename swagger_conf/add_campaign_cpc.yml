@@ -1,0 +1,60 @@
+swagger: "2.0"
+info:
+  title: "Ozon Performance API Documentation"
+  contact:
+    email: "s.fedyushin@ecomru.ru"
+  basePath: "/swagger"
+paths:
+  "/ozonperformance/addcampcpс":
+    post:
+tags:
+  - campaign
+    - add
+summary: "Создать кампанию с оплатой за клики"
+description: "Метод для создания товарной рекламной кампании с моделью оплаты за клики"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  required: true
+  schema:
+    type: "object"
+    properties:
+      client_id:
+        type: "string"
+        example: "123456-7890123456@advertising.performance.ozon.ru"
+      client_secret:
+        type: "string"
+        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+      title:
+        type: "string"
+        example: "abc123"
+      from_date:
+        type: "string"
+        example: "YYYY-MM-DD"
+      to_date:
+        type: "string"
+        example: "YYYY-MM-DD"
+      daily_budget:
+        type: "string"
+        example: "1000000"
+      exp_strategy:
+        type: "string"
+        example: "DAILY_BUDGET"
+      placement:
+        type: "string"
+        example: "PLACEMENT_INVALID"
+      product_autopilot_strategy:
+        type: "string"
+        example: "NO_AUTO_STRATEGY"
+      pcm:
+        type: "string"
+        example: "PRODUCT_CAMPAIGN_MODE_AUTO"
+responses:
+  200:
+    description: "OK"
+  400:
+    description: "Bad Request"

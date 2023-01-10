@@ -1,0 +1,61 @@
+swagger: "2.0"
+info:
+  title: "Ozon Performance API Documentation"
+  contact:
+    email: "s.fedyushin@ecomru.ru"
+  basePath: "/swagger"
+paths:
+  "/ozonperformance/editgroup":
+    post:
+tags:
+  - group
+    - edit
+summary: "Редактировать группу"
+description: "Метод для изменения параметров группы"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  required: true
+  schema:
+    type: "object"
+    properties:
+      client_id:
+        type: "string"
+        example: "123456-7890123456@advertising.performance.ozon.ru"
+      client_secret:
+        type: "string"
+        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+      campaign_id:
+        type: "string"
+        example: "1234567"
+      group_id:
+        type: "string"
+        example: "12345"
+      title:
+        type: "string"
+        example: "abc123"
+        description: Название группы
+      stopwords:
+        type: "array"
+        example: ["маркетплейс", "маркет"]
+        description: Список стоп-слов
+      phrases:
+        type: "array"
+        example: ["маркетплейс продажи", "яндекс маркет"]
+        description: Список поисковых фраз
+      bids_list:
+        type: "array"
+        example: [ "100000000", "200000000" ]
+        description: Список ставок поисковых фраз
+      relevance_status:
+        type: "array"
+        example: [ "__", "__" ]
+responses:
+  200:
+    description: "OK"
+  400:
+    description: "Bad Request"

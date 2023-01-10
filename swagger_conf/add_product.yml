@@ -1,0 +1,54 @@
+swagger: "2.0"
+info:
+  title: "Ozon Performance API Documentation"
+  contact:
+    email: "s.fedyushin@ecomru.ru"
+  basePath: "/swagger"
+paths:
+  "/ozonperformance/addproduct":
+    post:
+tags:
+  - product
+    - add
+summary: "Добавление товара на страницах каталога и поиска — добавление без группы"
+description: "Метод для добавления товара на страницах каталога и поиска — добавление без группы"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  required: true
+  schema:
+    type: "object"
+    properties:
+      client_id:
+        type: "string"
+        example: "123456-7890123456@advertising.performance.ozon.ru"
+      client_secret:
+        type: "string"
+        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+      campaign_id:
+        type: "string"
+        example: "1234567"
+      sku:
+        type: "string"
+        example: "1234567890"
+      stopwords:
+        type: "array"
+        example: [ "кровать", "шкаф" ]
+        description: Список стоп-слов
+      phrases:
+        type: "array"
+        example: [ "купить диван", "купить мебель" ]
+        description: Список поисковых фраз
+      bids_list:
+        type: "array"
+        example: [ "100000000", "200000000" ]
+        description: Ставки поисковых фраз
+responses:
+  200:
+    description: "OK"
+  400:
+    description: "Bad Request"

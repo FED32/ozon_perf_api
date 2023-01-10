@@ -1,0 +1,21 @@
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'master'
+      when: never
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        TAG_NAME: api_server_runner
+      when: always
+    #- if: $CI_COMMIT_BRANCH == "dev"
+ 
+stages:
+- deploy
+deploy:
+  stage: deploy
+  tags:
+    - ${TAG_NAME}
+  script:
+  - docker compose down
+  - docker rmi ozon_performance_ecom_api-app
+  - docker rmi ozon_performance_ecom_api-nginx
+  - docker compose up -d
