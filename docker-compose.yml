@@ -1,12 +1,28 @@
 version: "3.8"
 
 services:
-  app:
+  ozon-performance-ecom-api:
     build: .
+    restart: always
+    container_name: ozon-performance-ecom-api 
     environment:
       TZ: Europe/Moscow
-    command: sh script.sh
     volumes:
       - /home/get/logs_all//ozon_performance_ecom_api/:/app/logs/
 
+  nginx:
+    container_name: ozon-performance-ecom-api
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - ozon-performance-ecom-api
+    restart: always
+    environment:
+      - "TZ=Europe/Moscow"
+    ports:
+      - 8091:80
+      - 4441:443
+    volumes:
+      - /home/get/cert:/app/cert
 
