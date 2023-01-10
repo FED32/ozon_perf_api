@@ -16,6 +16,6 @@ deploy:
     - ${TAG_NAME}
   script:
   - docker compose down
-  # - docker rmi ozon_performance_ecom_api-app
-  # - docker rmi ozon_performance_ecom_api-nginx
+  - docker rmi ozon_performance_ecom_api-ozon-performance-ecom-api
+  - docker rmi ozon_performance_ecom_api-nginx
   - docker compose up -d
