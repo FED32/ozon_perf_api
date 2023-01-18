@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/delproducts":
     post:
 tags:
-  - product
-    - edit
+  - products
+#    - edit
 summary: "Удалить товары из кампании"
 description: "Метод для удаления товаров из кампании"
 consumes:
@@ -26,14 +26,17 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании.
       sku_list:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "1234567890", "0987654321" ]
         description: SKU товаров
 responses:

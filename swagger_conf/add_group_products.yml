@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/addgroupproducts":
     post:
 tags:
-  - product
-    - add
+  - products
+#    - add
 summary: "Добавить в кампанию товары в ранее созданные группы с размещением на страницах каталога и поиска"
 description: "Метод для добавления в кампанию товаров в ранее созданные группы с размещением на страницах каталога и поиска"
 consumes:
@@ -26,22 +26,29 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании.
       sku_list:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "1234567890", "0987654321" ]
-        description: SKU товаров
+        description: SKU рекламируемых товаров
       bids_list:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "100000000", "200000000" ]
         description: ставки товаров
       groups_list:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "123456", "7890123" ]
         description: список id групп
 responses:

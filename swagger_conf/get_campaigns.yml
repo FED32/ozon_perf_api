@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/campaigns":
     post:
 tags:
-  - campaign
-    - get info
+  - campaigns
+#    - get info
 summary: "Получить кампании"
 description: "Список кампаний с информацией"
 consumes:
@@ -26,9 +26,9 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
 responses:
   200:
     description: "OK"
