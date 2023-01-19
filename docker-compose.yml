@@ -7,6 +7,12 @@ services:
     container_name: ozon-performance-ecom-api 
     environment:
       TZ: Europe/Moscow
+      ECOMRU_PG_DB_NAME: ${ECOMRU_PG_DB_NAME}
+      ECOMRU_PG_HOST: ${ECOMRU_PG_HOST}
+      ECOMRU_PG_PORT: ${ECOMRU_PG_PORT}
+      ECOMRU_PG_USER: ${ECOMRU_PG_USER}
+      ECOMRU_PG_PASSWORD: ${ECOMRU_PG_PASSWORD}
+      ECOMRU_PG_SSL_MODE: ${ECOMRU_PG_SSL_MODE}
     volumes:
       - /home/get/logs_all//ozon_performance_ecom_api/:/app/logs/
 
