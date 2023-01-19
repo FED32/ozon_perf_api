@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/editgroup":
     post:
 tags:
-  - group
-    - edit
+  - groups
+#    - edit
 summary: "Редактировать группу"
 description: "Метод для изменения параметров группы"
 consumes:
@@ -26,33 +26,43 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании.
       group_id:
         type: "string"
         example: "12345"
+        description: Идентификатор группы.
       title:
         type: "string"
         example: "abc123"
-        description: Название группы
+        description: Название группы (не обязательно)
       stopwords:
-        type: "array"
+        type:
+          - array
+            - string
         example: ["маркетплейс", "маркет"]
-        description: Список стоп-слов
+        description: Список стоп-слов (не обязательно)
       phrases:
-        type: "array"
+        type:
+          - array
+            - string
         example: ["маркетплейс продажи", "яндекс маркет"]
-        description: Список поисковых фраз
+        description: Список поисковых фраз (не обязательно)
       bids_list:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "100000000", "200000000" ]
-        description: Список ставок поисковых фраз
+        description: Список ставок поисковых фраз (не обязательно)
       relevance_status:
-        type: "array"
+        type:
+          - array
+            - string
         example: [ "__", "__" ]
 responses:
   200:

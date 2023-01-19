@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/addcampcpс":
     post:
 tags:
-  - campaign
-    - add
+  - campaigns
+#    - add
 summary: "Создать кампанию с оплатой за клики"
 description: "Метод для создания товарной рекламной кампании с моделью оплаты за клики"
 consumes:
@@ -26,33 +26,47 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       title:
         type: "string"
         example: "abc123"
+        description: Название рекламной кампании (не обязательно)
       from_date:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата начала рекламной кампании по московскому времени.Если поле не задано, датой старта считается начало текущего дня. Открутка начинается сразу после активации кампании, если не нужна модерация.
       to_date:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата окончания рекламной кампании по московскому времени. Поле не учитывается для кампаний с оплатой за клики, созданных в автоматическом режиме. (не обязательно)
       daily_budget:
         type: "string"
         example: "1000000"
+        description: Ограничение дневного бюджета рекламной кампании. Единица измерения — одна миллионная доля рубля, округляется до копеек. Если поле не задано, дневной бюджет не ограничен.
       exp_strategy:
         type: "string"
         example: "DAILY_BUDGET"
+        enum:
+          - "DAILY_BUDGET"
+          - "ASAP"
+        description: Способ распределения бюджета DAILY_BUDGET — бюджет равномерно распределяется по дням; ASAP — быстрая открутка, бюджет не ограничен по дням. По умолчанию — DAILY_BUDGET. (не обязательно)
       placement:
         type: "string"
         example: "PLACEMENT_INVALID"
+        enum:
+          - "PLACEMENT_INVALID"
+          - "PLACEMENT_SEARCH_AND_CATEGORY"
+        description: Место размещения рекламируемых товаров PLACEMENT_INVALID — не определено. PLACEMENT_SEARCH_AND_CATEGORY — поиск и категории («Трафареты»).
       product_autopilot_strategy:
         type: "string"
         example: "NO_AUTO_STRATEGY"
+        description: Автостратегия, которая будет использоваться для кампании. Укажите NO_AUTO_STRATEGY — не использовать автостратегию. (не обязательно)
       pcm:
         type: "string"
         example: "PRODUCT_CAMPAIGN_MODE_AUTO"
+        description: Режим создания и управления товарной рекламной кампанией. Для кампаний с оплатой за клики укажите PRODUCT_CAMPAIGN_MODE_AUTO — автоматически.
 responses:
   200:
     description: "OK"

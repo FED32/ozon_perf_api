@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/activate":
     post:
 tags:
-  - campaign
-    - manage
+  - campaigns
+#    - manage
 summary: "Активировать кампанию"
 description: "Метод для активации кампании"
 consumes:
@@ -26,12 +26,13 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании
 responses:
   200:
     description: "OK"

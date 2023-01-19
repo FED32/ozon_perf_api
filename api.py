@@ -4,6 +4,7 @@ from werkzeug.exceptions import BadRequestKeyError
 from ozon_performance import OzonPerformance
 from flasgger import Swagger, swag_from
 from config import Configuration
+from get_secret_from_db import *
 import logger_api
 
 
@@ -45,7 +46,8 @@ def get_campaigns():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -76,7 +78,8 @@ def get_objects():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
         campaign_id = json_file["campaign_id"]
 
         ozon = OzonPerformance(client_id, client_secret)
@@ -108,7 +111,8 @@ def available():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -149,7 +153,8 @@ def add_campaign_cpm():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -204,7 +209,8 @@ def add_campaign_cpc():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -256,7 +262,8 @@ def activate_camp():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
         campaign_id = json_file["campaign_id"]
 
         ozon = OzonPerformance(client_id, client_secret)
@@ -298,7 +305,8 @@ def deactivate_camp():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -341,7 +349,8 @@ def campaign_period():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -387,7 +396,8 @@ def campaign_budget():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -432,7 +442,8 @@ def add_group():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -481,7 +492,8 @@ def edit_group():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -530,7 +542,8 @@ def addcardproducts():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -581,7 +594,8 @@ def addgroupproducts():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -633,7 +647,8 @@ def addproduct():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -686,7 +701,8 @@ def updbidscardproducts():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -737,7 +753,8 @@ def updbidsgroupproducts():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -789,7 +806,8 @@ def updbidsproduct():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -843,7 +861,8 @@ def prodlist():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -886,7 +905,8 @@ def delproducts():
     try:
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
-        client_secret = json_file["client_secret"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id)
 
         ozon = OzonPerformance(client_id, client_secret)
 
@@ -923,5 +943,3 @@ def delproducts():
         raise HttpError(400, f'{ex}')
 
 
-# if __name__ == '__main__':
-#     app.run(debug=False, port=port, host=host)

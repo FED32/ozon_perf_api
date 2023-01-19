@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/period":
     post:
 tags:
-  - campaign
-    - edit
+  - campaigns
+#    - edit
 summary: "Изменить сроки проведения кампании"
 description: "Метод для изменения сроков проведения кампании"
 consumes:
@@ -26,18 +26,21 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании.
       date_from:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата начала рекламной кампании по московскому времени. Не может быть раньше текущей даты. (не обязательно)
       date_to:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата окончания рекламной кампании по московскому времени. Не может быть раньше даты начала. Параметр учитывается только для кампаний с ручным управлением. (не обязательно)
 responses:
   200:
     description: "OK"

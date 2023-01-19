@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/addcampcpm":
     post:
 tags:
-  - campaign
-    - add
+  - campaigns
+#    - add
 summary: "Создать кампанию с оплатой за показы"
 description: "Метод для создания товарной рекламной кампании с моделью оплаты за показы"
 consumes:
@@ -26,42 +26,66 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       title:
         type: "string"
         example: "abc123"
+        description: Название рекламной кампании (не обязательно)
       from_date:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата начала рекламной кампании по московскому времени. Если поле не задано, датой старта считается начало текущего дня. Открутка начинается сразу после активации кампании, если не нужна модерация. (не обязательно)
       to_date:
         type: "string"
         example: "YYYY-MM-DD"
+        description: Дата окончания рекламной кампании по московскому времени. Учитывается только для автоматических кампаний брендов и агентств. В других организациях учитывается только для кампаний с ручным управлением. (не обязательно)
       budget:
         type: "string"
         example: "1000000"
+        description: Ограничение общего бюджета рекламной кампании. Единица измерения — одна миллионная доля рубля, округляется до копеек. Учитывается только для автоматических кампаний брендов и агентств. В других организациях установить ограничение общего бюджета не получится. Установите неограниченный бюджет - передайте 0 в этом параметре.
       daily_budget:
         type: "string"
         example: "1000000"
+        description: Ограничение дневного бюджета рекламной кампании. Единица измерения — одна миллионная доля рубля, округляется до копеек. Если поле не задано, дневной бюджет не ограничен. (не обязательно)
       exp_strategy:
         type: "string"
         example: "DAILY_BUDGET"
+        enum:
+          - "DAILY_BUDGET"
+          - "ASAP"
+        description: Способ распределения бюджета. DAILY_BUDGET — бюджет равномерно распределяется по дням; ASAP — быстрая открутка, бюджет не ограничен по дням. По умолчанию — DAILY_BUDGET. (не обязательно)
       placement:
         type: "string"
         example: "PLACEMENT_INVALID"
+        enum:
+          - "PLACEMENT_INVALID"
+          - "PLACEMENT_PDP"
+          - "PLACEMENT_SEARCH_AND_CATEGORY"
+        description: Место размещения рекламируемых товаров. PLACEMENT_INVALID — не определено. PLACEMENT_PDP — карточка товара. Доступно только для кампаний с ручным управлением. PLACEMENT_SEARCH_AND_CATEGORY — поиск и категории («Трафареты»).
       product_autopilot_strategy:
         type: "string"
         example: "NO_AUTO_STRATEGY"
+        enum:
+          - "MAX_VIEWS"
+          - "NO_AUTO_STRATEGY"
+        description: Автостратегия, которая будет использоваться для кампании. MAX_VIEWS — максимальное количество показов. NO_AUTO_STRATEGY — не использовать автостратегию.
       autopilot_category_id:
         type: "string"
         example: "12345"
+        description: Информация о кампании. Обязательный параметр, если в параметре productAutopilotStrategy включена автостратегия.
       autopilot_sku_add_mode:
         type: "string"
         example: "PRODUCT_CAMPAIGN_SKU_ADD_MODE_UNKNOWN"
+        description: Информация о кампании. Обязательный параметр, если в параметре productAutopilotStrategy включена автостратегия.
       pcm:
         type: "string"
         example: "PRODUCT_CAMPAIGN_MODE_AUTO"
+        enum:
+          - "PRODUCT_CAMPAIGN_MODE_MANUAL"
+          - "PRODUCT_CAMPAIGN_MODE_AUTO"
+        description: Режим создания и управления товарной рекламной кампанией. PRODUCT_CAMPAIGN_MODE_MANUAL — вручную; PRODUCT_CAMPAIGN_MODE_AUTO — автоматически. (не обязательно)
 responses:
   200:
     description: "OK"

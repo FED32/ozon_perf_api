@@ -8,8 +8,8 @@ paths:
   "/ozonperformance/budget":
     post:
 tags:
-  - campaign
-    - edit
+  - campaigns
+#    - edit
 summary: "Изменить ограничения дневного бюджета кампании"
 description: "Метод для изменения ограничения дневного бюджета кампании"
 consumes:
@@ -26,18 +26,24 @@ parameters:
       client_id:
         type: "string"
         example: "123456-7890123456@advertising.performance.ozon.ru"
-      client_secret:
-        type: "string"
-        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
+#      client_secret:
+#        type: "string"
+#        example: "xxxxxxxxxxxxxxyyyyyyyyyyyyyyyyyyyyyzzzzzzzzzzzzzzzzzzzzzzz1111111111111222222222"
       campaign_id:
         type: "string"
         example: "1234567"
+        description: Идентификатор кампании.
       daily_budget:
         type: "string"
         example: "550000000"
+        description: Ограничение дневного бюджета рекламной кампании. Единица измерения — одна миллионная доля рубля, округляется до копеек.
       exp_str:
         type: "string"
         example: "DAILY_BUDGET"
+        enum:
+          - "DAILY_BUDGET"
+          - "ASAP"
+        description: Способ распределения бюджета. DAILY_BUDGET — бюджет равномерно распределяется по дням; ASAP — быстрая открутка, бюджет не ограничен по дням. По умолчанию — DAILY_BUDGET. (не обязательно)
 responses:
   200:
     description: "OK"
