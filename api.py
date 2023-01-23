@@ -6,6 +6,7 @@ from flasgger import Swagger, swag_from
 from config import Configuration
 from get_secret_from_db import *
 import logger_api
+from db_work import put_query
 
 
 app = Flask(__name__)
@@ -177,6 +178,8 @@ def add_campaign_cpm():
             res = ozon.create_camp_cpm(title, from_date, to_date, daily_budget, budget, exp_strategy, placement,
                                        product_autopilot_strategy, autopilot_category_id, autopilot_sku_add_mode, pcm)
 
+            put_query(json_file=json_file, table_name='ozon_perf_addcampaigns', result=res)
+
             try:
                 if res.status_code == 200:
                     logger.info(f"add campaign cpm: OK")
@@ -229,6 +232,8 @@ def add_campaign_cpc():
 
             res = ozon.create_camp_cpc(title, from_date, to_date, daily_budget, exp_strategy, placement,
                                        product_autopilot_strategy, pcm)
+
+            put_query(json_file=json_file, table_name='ozon_perf_addcampaigns', result=res)
 
             try:
                 if res.status_code == 200:
@@ -460,6 +465,8 @@ def add_group():
 
             res = ozon.add_group(campaign_id, title, stopwords, phrases, bids_list, relevance_status)
 
+            put_query(json_file=json_file, table_name='ozon_perf_addgroups', result=res)
+
             try:
                 if res.status_code == 200:
                     logger.info(f"add group: OK")
@@ -557,7 +564,11 @@ def addcardproducts():
             bids = ozon.card_bids(sku_list, bids_list)
             if bids is not None:
                 campaign_id = json_file["campaign_id"]
+
                 res = ozon.add_products(campaign_id=campaign_id, bids=bids)
+
+                put_query(json_file=json_file, table_name='ozon_perf_addproducts', result=res)
+
                 try:
                     if res.status_code == 200:
                         logger.info(f"add card products: OK")
@@ -610,7 +621,11 @@ def addgroupproducts():
             bids = ozon.group_bids(sku_list, bids_list, groups_list)
             if bids is not None:
                 campaign_id = json_file["campaign_id"]
+
                 res = ozon.add_products(campaign_id=campaign_id, bids=bids)
+
+                put_query(json_file=json_file, table_name='ozon_perf_addproducts', result=res)
+
                 try:
                     if res.status_code == 200:
                         logger.info(f"add group products: OK")
@@ -664,7 +679,11 @@ def addproduct():
             bids = ozon.phrases_bid(sku, stopwords, phrases, bids_list)
             if bids is not None:
                 campaign_id = json_file["campaign_id"]
+
                 res = ozon.add_products(campaign_id=campaign_id, bids=bids)
+
+                put_query(json_file=json_file, table_name='ozon_perf_addproducts', result=res)
+
                 try:
                     if res.status_code == 200:
                         logger.info(f"add product: OK")
