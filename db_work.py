@@ -2,35 +2,15 @@ import pandas as pd
 import numpy as np
 import os
 import psycopg2
-from sqlalchemy import create_engine
-import logger_api
 from datetime import datetime
 import time
 import json
 from flask import Flask, jsonify
 
 
-logger = logger_api.init_logger()
-
-# читаем параметры подключения
-host = os.environ.get('ECOMRU_PG_HOST', None)
-port = os.environ.get('ECOMRU_PG_PORT', None)
-ssl_mode = os.environ.get('ECOMRU_PG_SSL_MODE', None)
-db_name = os.environ.get('ECOMRU_PG_DB_NAME', None)
-user = os.environ.get('ECOMRU_PG_USER', None)
-password = os.environ.get('ECOMRU_PG_PASSWORD', None)
-target_session_attrs = 'read-write'
-
-# host = 'localhost'
-# port = '5432'
-# db_name = 'postgres'
-# user = 'postgres'
-# password = ' '
-
-db_params = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
-
-
 def put_query(json_file,
+              engine,
+              logger,
               table_name: str,
               attempts: int = 3,
               result=None
@@ -55,8 +35,6 @@ def put_query(json_file,
 
     dataset = pd.DataFrame([json_file])
     dataset['date_time'] = datetime.now()
-
-    engine = create_engine(db_params)
 
     n = 0
     while n < attempts:
