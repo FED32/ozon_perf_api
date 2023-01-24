@@ -1,27 +1,8 @@
 import pandas as pd
 import numpy as np
-import os
-import psycopg2
-from sqlalchemy import create_engine
-import logger_api
 
 
-logger = logger_api.init_logger()
-
-
-# читаем параметры подключения
-host = os.environ.get('ECOMRU_PG_HOST', None)
-port = os.environ.get('ECOMRU_PG_PORT', None)
-ssl_mode = os.environ.get('ECOMRU_PG_SSL_MODE', None)
-db_name = os.environ.get('ECOMRU_PG_DB_NAME', None)
-user = os.environ.get('ECOMRU_PG_USER', None)
-password = os.environ.get('ECOMRU_PG_PASSWORD', None)
-target_session_attrs = 'read-write'
-
-db_params = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
-
-
-def get_secret_from_db(client_id: str):
+def get_secret_from_db(client_id: str, engine, logger):
     """"Получает client_secret из БД по client_id"""
 
     query = f"""
@@ -40,8 +21,6 @@ def get_secret_from_db(client_id: str):
             """
 
     try:
-        engine = create_engine(db_params)
-
         data = pd.read_sql(query, con=engine)
 
         if data is None:
