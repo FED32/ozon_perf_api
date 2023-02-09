@@ -1,0 +1,33 @@
+swagger: "2.0"
+info:
+  title: "Ozon Performance API Documentation"
+  contact:
+    email: "s.fedyushin@gtcom.io"
+  basePath: "/swagger"
+paths:
+  "/ozonperformance/getcampaignsdb":
+    post:
+tags:
+  - campaigns
+summary: "Получить кампании из БД"
+description: "Метод для получения кампаний клиента из БД"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+parameters:
+- in: "body"
+  name: "body"
+  required: true
+  schema:
+    type: "object"
+    properties:
+      client_id:
+        type: "string"
+        example: "123456-7890123456@advertising.performance.ozon.ru"
+        description: client_id OZON Performance API
+responses:
+  200:
+    description: "OK"
+  400:
+    description: "Bad Request"

@@ -889,16 +889,17 @@ class OzonPerformance:
         return response
 
     def add_group(self, campaign_id: str,
-                  title=None,
-                  stopwords=None,
-                  phrases=None,
-                  bids_list=None,
-                  relevance_status=None
+                  title: str = None,
+                  stopwords: list[str] = None,
+                  phrases: list[str] = None,
+                  bids_list: list[str] = None,
+                  relevance_status: list[str] = None
                   ):
         """
         Создать группу
         """
-        url = f'https://performance.ozon.ru:443/api/client/campaign/{campaign_id}/group'
+        url = f"""https://performance.ozon.ru:443/api/client/campaign/{campaign_id}/group"""
+        # url = f"""https://performance.ozon.ru:443/api/client/campaign/group"""
 
         head = {"Authorization": self.auth['token_type'] + ' ' + self.auth['access_token'],
                 "Content-Type": "application/json",
@@ -912,6 +913,7 @@ class OzonPerformance:
             phrases_list = None
 
         body = dict()
+        # body = {'campaignId': campaign_id}
 
         if title is not None:
             body.setdefault("title", title)
@@ -923,6 +925,10 @@ class OzonPerformance:
             body.setdefault("phrases", phrases_list)
 
         response = requests.post(url, headers=head, data=json.dumps(body))
+
+        # print(url)
+        # print(body)
+
         return response
 
     def edit_group(self, campaign_id: str,

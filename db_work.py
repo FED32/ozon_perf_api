@@ -36,17 +36,83 @@ def put_query(json_file,
     dataset = pd.DataFrame([json_file])
     dataset['date_time'] = datetime.now()
 
-    n = 0
-    while n < attempts:
+    with engine.begin() as connection:
+        n = 0
+        while n < attempts:
+            try:
+                res = dataset.to_sql(name=table_name, con=connection, if_exists='append', index=False)
+                logger.info(f"Upload to {table_name} - ok")
+                return 'ok'
+            except BaseException as ex:
+                logger.error(f"data to db: {ex}")
+                time.sleep(5)
+                n += 1
+        logger.error("data to db error")
+        return None
+
+def get_clients(account_id: int, engine, logger):
+    """Получает список доступных аккаунтов для клиента"""
+
+    query = f"""
+             SELECT account_id as api_id, attribute_value as client_id 
+             FROM account_service_data asd WHERE attribute_id = 9 AND account_id = {account_id}
+             """
+
+    with engine.begin() as connection:
         try:
-            res = dataset.to_sql(name=table_name, con=engine, if_exists='append', index=False)
-            logger.info(f"Upload to {table_name} - ok")
-            return 'ok'
+            data = pd.read_sql(query, con=connection)
+
+            if data is None:
+                logger.error("accounts database error")
+                return None
+            elif data.shape[0] == 0:
+                logger.info("non-existent account")
+                return []
+            else:
+                return data['client_id'].tolist()
+
         except BaseException as ex:
-            logger.error(f"data to db: {ex}")
-            time.sleep(5)
-            n += 1
-    logger.error("data to db error")
-    return None
+            logger.error(f"get clients: {ex}")
+            # print('Нет подключения к БД')
+            return None
+
+def get_objects_from_db(client_id: str, table_name: str, engine, logger):
+    """Получает кампании клиента созданные через сервис"""
+
+    if table_name == 'ozon_perf_addproducts':
+
+        query = f"""
+                 SELECT * 
+                 FROM {table_name} 
+                 WHERE res_error IS NULL AND client_id = '{client_id}'
+                 """
+
+    else:
+
+        query = f"""
+                 SELECT * 
+                 FROM {table_name} 
+                 WHERE res_id IS NOT NULL AND client_id = '{client_id}'
+                 """
+
+    with engine.begin() as connection:
+        try:
+            data = pd.read_sql(query, con=connection)
+
+            if data is None:
+                logger.error("accounts database error")
+                return None
+            elif data.shape[0] == 0:
+                logger.info(f"no data for account {client_id}")
+                return []
+            else:
+                return data.to_dict(orient='records')
+
+        except BaseException as ex:
+            logger.error(f"get objects: {ex}")
+            # print('Нет подключения к БД')
+            return None
+
+
 
 

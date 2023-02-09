@@ -6,7 +6,7 @@ from flasgger import Swagger, swag_from
 from config import Configuration
 from get_secret_from_db import get_secret_from_db
 import logger_api
-from db_work import put_query
+from db_work import put_query, get_clients, get_objects_from_db
 from sqlalchemy import create_engine
 import os
 
@@ -988,5 +988,70 @@ def delproducts():
     except BaseException as ex:
         logger.error(f'delete products: {ex}')
         raise HttpError(400, f'{ex}')
+
+
+@app.route('/ozonperformance/getclients', methods=['POST'])
+@swag_from("swagger_conf/get_clients.yml")
+def get_clients_():
+    """Получить список доступных аккаунтов для клиента"""
+
+    try:
+        json_file = request.get_json(force=False)
+        account_id = json_file["account_id"]
+
+        res = get_clients(account_id, engine, logger)
+
+        if res is None:
+            raise HttpError(400, f'accounts database error')
+        else:
+            logger.info(f"get_clients: OK")
+            return jsonify({'result': res})
+
+    except BadRequestKeyError:
+        logger.error("get_clients: BadRequest")
+        return Response(None, 400)
+
+    except KeyError:
+        logger.error("get_clients: KeyError")
+        return Response(None, 400)
+
+    except BaseException as ex:
+        logger.error(f'get_clients: {ex}')
+        raise HttpError(400, f'{ex}')
+
+
+@app.route('/ozonperformance/getcampaignsdb', methods=['POST'])
+@swag_from("swagger_conf/get_campaigns_db.yml")
+def get_campaigns_db():
+    """Получить кампании из БД"""
+
+    try:
+        json_file = request.get_json(force=False)
+        client_id = json_file["client_id"]
+
+        res =  get_objects_from_db(client_id, table_name='ozon_perf_addcampaigns', engine=engine, logger=logger)
+
+        if res is None:
+            raise HttpError(400, f'accounts database error')
+
+        else:
+            logger.info(f"get_campaigns_db: OK")
+            return jsonify({'result': res})
+
+    except BadRequestKeyError:
+        logger.error("get_campaigns_db: BadRequest")
+        return Response(None, 400)
+
+    except KeyError:
+        logger.error("get_campaigns_db: KeyError")
+        return Response(None, 400)
+
+    except BaseException as ex:
+        logger.error(f'get_campaigns_db: {ex}')
+        raise HttpError(400, f'{ex}')
+
+
+
+
 
 
