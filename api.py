@@ -60,6 +60,12 @@ class HttpError(Exception):
         self.message = message
 
 
+@app.after_request
+def apply_caching(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
 @app.route('/ozonperformance/campaigns', methods=['POST'])
 @swag_from("swagger_conf/get_campaigns.yml")
 def get_campaigns():
