@@ -5,13 +5,13 @@ info:
     email: "s.fedyushin@ecomru.ru"
   basePath: "/swagger"
 paths:
-  "/ozonperformance/addgroupproducts":
+  "/ozonperformance/addphrasesproducts":
     post:
 tags:
   - products
 #    - add
-summary: "Добавить в кампанию товары в ранее созданные группы с размещением на страницах каталога и поиска"
-description: "Метод для добавления в кампанию товаров в ранее созданные группы с размещением на страницах каталога и поиска"
+summary: "Добавление товаров на страницах каталога и поиска — добавление без группы"
+description: "Метод для добавления в кампанию товаров в ранее созданные группы с размещением на страницах каталога и поиска. Для добавляемых товаров необходимо задать список поисковых фраз со списком ставок по фразам (не обязательно) и список стоп-фраз (при необходимости)"
 consumes:
 - "application/json"
 produces:
@@ -45,12 +45,24 @@ parameters:
             - string
         example: [ "100000000", "200000000" ]
         description: ставки товаров
-      groups_list:
+      stopwords:
         type:
           - array
             - string
-        example: [ "123456", "7890123" ]
-        description: список id групп
+        example: ["кровать", "шкаф"]
+        description: Список стоп-слов
+      phrases:
+        type:
+          - array
+            - string
+        example: [ "купить диван", "купить мебель" ]
+        description: Список поисковых фраз
+      phrases_bids:
+        type:
+          - array
+            - string
+        example: [ "100000000", "200000000" ]
+        description: Ставки поисковых фраз
 responses:
   200:
     description: "OK"

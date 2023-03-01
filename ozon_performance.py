@@ -838,6 +838,38 @@ class OzonPerformance:
             print('Не правильный формат данных')
             return None
 
+    @staticmethod
+    def phrases_bids(sku_list: list[str],
+                     phrases: list[str],
+                     bids_list: list[str] = None,
+                     phrases_bids: list[str] = None,
+                     stopwords: list[str] = None
+                     ):
+        """Для добавления (обновления) в кампанию товаров без группы с размещением на страницах каталога и поиска"""
+
+        if phrases_bids is not None:
+            if len(phrases_bids) == len(phrases):
+                phrases_params = [{"bid": bd, "phrase": phr} for bd, phr in zip(phrases_bids, phrases)]
+            else:
+                return None
+        else:
+            phrases_params = [{"phrase": phr} for phr in phrases]
+
+        if bids_list is not None:
+            if len(sku_list) == len(bids_list):
+                if stopwords is not None:
+                    return [{"sku": sku, "bid": bid, "phrases": phrases_params, "stopWords": stopwords} for sku, bid in zip(sku_list, bids_list)]
+                else:
+                    return [{"sku": sku, "bid": bid, "phrases": phrases_params} for sku, bid in zip(sku_list, bids_list)]
+            else:
+                return None
+
+        else:
+            if stopwords is not None:
+                return [{"sku": sku, "phrases": phrases_params,"stopWords": stopwords} for sku in sku_list]
+            else:
+                return[{"sku": sku, "phrases": phrases_params} for sku in sku_list]
+
     def add_products(self, campaign_id, bids):
         """
         Добавить товары в кампанию

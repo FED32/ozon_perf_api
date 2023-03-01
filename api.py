@@ -748,6 +748,75 @@ def addproduct():
         raise HttpError(400, f'{ex}')
 
 
+@app.route('/ozonperformance/addphrasesproducts', methods=['POST'])
+@swag_from("swagger_conf/add_phrases_products.yml")
+def addphrasesproducts():
+    """
+    Добавление товаров на страницах каталога и поиска — добавление без группы.
+    Для добавляемых товаров необходимо задать список поисковых фраз со списком ставок по фразам (не обязательно) и список стоп-фраз (при необходимости)
+    """
+
+    try:
+        json_file = request.get_json(force=False)
+        client_id = json_file["client_id"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id, engine=engine, logger=logger)
+
+        ozon = OzonPerformance(client_id, client_secret)
+
+        if ozon.auth is None:
+            logger.error("add phrases products: Client authorization failed")
+            return jsonify({'error': 'Ошибка авторизации'})
+        else:
+            sku_list = json_file.get("sku_list", None)
+            bids_list = json_file.get("bids_list", None)
+            stopwords = json_file.get("stopwords", None)
+            phrases = json_file.get("phrases", None)
+            phrases_bids = json_file.get("phrases_bids", None)
+
+            bids = ozon.phrases_bids(sku_list=sku_list,
+                                     bids_list=bids_list,
+                                     phrases=phrases,
+                                     phrases_bids=phrases_bids,
+                                     stopwords=stopwords)
+
+            if bids is not None:
+                campaign_id = json_file["campaign_id"]
+
+                res = ozon.add_products(campaign_id=campaign_id, bids=bids)
+
+                put_query(json_file=json_file, table_name='ozon_perf_addproducts', result=res, engine=engine,
+                          logger=logger)
+
+                try:
+                    if res.status_code == 200:
+                        logger.info(f"add phrases products: OK")
+                        return jsonify({'result': res.json(), 'message': 'Добавлено'})
+                    else:
+                        logger.error(f"add phrases products: error OZON {res.status_code}")
+                        return jsonify({'error': res.text, 'message': 'Ошибка при обращении к серверу OZON',
+                                        'status_code': res.status_code})
+                except:
+                    logger.error(f"add phrases product: unknown error Ozon server")
+                    return jsonify({'error': 'Не известная ошибка при обращении к серверу OZON'})
+
+            else:
+                logger.info(f"add phrases product: incorrect data")
+                return jsonify({'error': 'Не правильный формат данных'})
+
+    except BadRequestKeyError:
+        logger.error("add phrases product: BadRequest")
+        return Response(None, 400)
+
+    except KeyError:
+        logger.error("add phrases product: KeyError")
+        return Response(None, 400)
+
+    except BaseException as ex:
+        logger.error(f'add phrases product: {ex}')
+        raise HttpError(400, f'{ex}')
+
+
 @app.route('/ozonperformance/updbidscardproducts', methods=['POST'])
 @swag_from("swagger_conf/upd_bids_card_products.yml")
 def updbidscardproducts():
@@ -905,6 +974,69 @@ def updbidsproduct():
 
     except BaseException as ex:
         logger.error(f'update bids product: {ex}')
+        raise HttpError(400, f'{ex}')
+
+
+@app.route('/ozonperformance/updbidsphrasesproducts', methods=['POST'])
+@swag_from("swagger_conf/upd_bids_phrases_products.yml")
+def updbidsphrasesproducts():
+    """Обновление ставок товаров на страницах каталога и поиска — без группы"""
+
+    try:
+        json_file = request.get_json(force=False)
+        client_id = json_file["client_id"]
+        # client_secret = json_file["client_secret"]
+        client_secret = get_secret_from_db(client_id=client_id, engine=engine, logger=logger)
+
+        ozon = OzonPerformance(client_id, client_secret)
+
+        if ozon.auth is None:
+            logger.error("update bids phrases products: Client authorization failed")
+            return jsonify({'error': 'Ошибка авторизации'})
+        else:
+            sku_list = json_file.get("sku_list", None)
+            bids_list = json_file.get("bids_list", None)
+            stopwords = json_file.get("stopwords", None)
+            phrases = json_file.get("phrases", None)
+            phrases_bids = json_file.get("phrases_bids", None)
+
+            bids = ozon.phrases_bids(sku_list=sku_list,
+                                     bids_list=bids_list,
+                                     phrases=phrases,
+                                     phrases_bids=phrases_bids,
+                                     stopwords=stopwords)
+
+            if bids is not None:
+                campaign_id = json_file["campaign_id"]
+
+                res = ozon.upd_bids(campaign_id=campaign_id, bids=bids)
+
+                try:
+                    if res.status_code == 200:
+                        logger.info(f"update bids phrases products: OK")
+                        return jsonify({'result': res.json(), 'message': 'Обновлено'})
+                    else:
+                        logger.error(f"update bids phrases products: error OZON {res.status_code}")
+                        return jsonify({'error': res.text, 'message': 'Ошибка при обращении к серверу OZON',
+                                        'status_code': res.status_code})
+                except:
+                    logger.error(f"update bids phrases products: unknown error Ozon server")
+                    return jsonify({'error': 'Не известная ошибка при обращении к серверу OZON'})
+
+            else:
+                logger.info(f"update bids phrases products: incorrect data")
+                return jsonify({'error': 'Не правильный формат данных'})
+
+    except BadRequestKeyError:
+        logger.error("update bids phrases products: BadRequest")
+        return Response(None, 400)
+
+    except KeyError:
+        logger.error("update bids phrases products: KeyError")
+        return Response(None, 400)
+
+    except BaseException as ex:
+        logger.error(f'update bids phrases products: {ex}')
         raise HttpError(400, f'{ex}')
 
 
