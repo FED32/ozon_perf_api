@@ -4,8 +4,44 @@ import os
 import psycopg2
 from datetime import datetime
 import time
+from sqlalchemy import exc
 import json
 from flask import Flask, jsonify
+
+
+def sql_query(query, engine, logger, type_='dict'):
+
+    with engine.connect() as connection:
+        with connection.begin() as transaction:
+
+            try:
+                data = pd.read_sql(query, con=connection)
+
+                if data is None:
+                    logger.error("database error")
+                    return None
+                elif data.shape[0] == 0:
+                    logger.info(f"no data")
+                    if type_ == 'dict':
+                        return []
+                    elif type_ == 'df':
+                        return data
+                else:
+                    if type_ == 'dict':
+                        return data.to_dict(orient='records')
+                    elif type_ == 'df':
+                        return data
+
+            except (exc.DBAPIError, exc.SQLAlchemyError):
+                logger.error("db error")
+                transaction.rollback()
+                raise
+            except BaseException as ex:
+                logger.error(f"{ex}")
+                transaction.rollback()
+                raise
+            finally:
+                connection.close()
 
 
 def put_query(json_file,
@@ -50,31 +86,45 @@ def put_query(json_file,
         logger.error("data to db error")
         return None
 
+
 def get_clients(account_id: int, engine, logger):
     """Получает список доступных аккаунтов для клиента"""
 
+    # query = f"""
+    #          SELECT account_id as api_id, attribute_value as client_id
+    #          FROM account_service_data asd WHERE attribute_id = 9 AND account_id = {account_id}
+    #          """
+
     query = f"""
-             SELECT account_id as api_id, attribute_value as client_id 
-             FROM account_service_data asd WHERE attribute_id = 9 AND account_id = {account_id}
+             SELECT 
+             al.name AS name, 
+             asd.account_id AS acc_id, 
+             asd.attribute_value as ozon_perf_client_id 
+             FROM account_list al 
+             JOIN account_service_data asd ON al.id = asd.account_id 
+             WHERE status_1 = 'Active' AND al.mp_id = 14 AND asd.attribute_id = 9 AND client_id = {account_id}
              """
 
-    with engine.begin() as connection:
-        try:
-            data = pd.read_sql(query, con=connection)
+    return sql_query(query, engine, logger, type_='dict')
 
-            if data is None:
-                logger.error("accounts database error")
-                return None
-            elif data.shape[0] == 0:
-                logger.info("non-existent account")
-                return []
-            else:
-                return data['client_id'].tolist()
+    # with engine.begin() as connection:
+    #     try:
+    #         data = pd.read_sql(query, con=connection)
+    #
+    #         if data is None:
+    #             logger.error("accounts database error")
+    #             return None
+    #         elif data.shape[0] == 0:
+    #             logger.info("non-existent account")
+    #             return []
+    #         else:
+    #             return data['client_id'].tolist()
+    #
+    #     except BaseException as ex:
+    #         logger.error(f"get clients: {ex}")
+    #         # print('Нет подключения к БД')
+    #         return None
 
-        except BaseException as ex:
-            logger.error(f"get clients: {ex}")
-            # print('Нет подключения к БД')
-            return None
 
 def get_objects_from_db(client_id: str, table_name: str, engine, logger):
     """Получает кампании клиента созданные через сервис"""
@@ -95,23 +145,25 @@ def get_objects_from_db(client_id: str, table_name: str, engine, logger):
                  WHERE res_id IS NOT NULL AND client_id = '{client_id}'
                  """
 
-    with engine.begin() as connection:
-        try:
-            data = pd.read_sql(query, con=connection)
+    return sql_query(query, engine, logger, type_='dict')
 
-            if data is None:
-                logger.error("accounts database error")
-                return None
-            elif data.shape[0] == 0:
-                logger.info(f"no data for account {client_id}")
-                return []
-            else:
-                return data.to_dict(orient='records')
-
-        except BaseException as ex:
-            logger.error(f"get objects: {ex}")
-            # print('Нет подключения к БД')
-            return None
+    # with engine.begin() as connection:
+    #     try:
+    #         data = pd.read_sql(query, con=connection)
+    #
+    #         if data is None:
+    #             logger.error("accounts database error")
+    #             return None
+    #         elif data.shape[0] == 0:
+    #             logger.info(f"no data for account {client_id}")
+    #             return []
+    #         else:
+    #             return data.to_dict(orient='records')
+    #
+    #     except BaseException as ex:
+    #         logger.error(f"get objects: {ex}")
+    #         # print('Нет подключения к БД')
+    #         return None
 
 
 

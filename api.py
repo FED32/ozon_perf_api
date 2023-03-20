@@ -33,7 +33,7 @@ engine = create_engine(db_params)
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
-app.config['SWAGGER'] = {"title": "Swagger-UI", "uiversion": 3}
+app.config['SWAGGER'] = {"title": "GTCOM-OzonPerformanceApi", "uiversion": 3}
 
 
 swagger_config = {
@@ -1169,7 +1169,7 @@ def get_campaigns_db():
         json_file = request.get_json(force=False)
         client_id = json_file["client_id"]
 
-        res =  get_objects_from_db(client_id, table_name='ozon_perf_addcampaigns', engine=engine, logger=logger)
+        res = get_objects_from_db(client_id, table_name='ozon_perf_addcampaigns', engine=engine, logger=logger)
 
         if res is None:
             raise HttpError(400, f'accounts database error')
@@ -1181,11 +1181,9 @@ def get_campaigns_db():
     except BadRequestKeyError:
         logger.error("get_campaigns_db: BadRequest")
         return Response(None, 400)
-
     except KeyError:
         logger.error("get_campaigns_db: KeyError")
         return Response(None, 400)
-
     except BaseException as ex:
         logger.error(f'get_campaigns_db: {ex}')
         raise HttpError(400, f'{ex}')

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sqlalchemy import exc
 
 
 def get_secret_from_db(client_id: str, engine, logger):
@@ -20,22 +21,50 @@ def get_secret_from_db(client_id: str, engine, logger):
             GROUP BY asd.attribute_id, asd.attribute_value, asd2.attribute_id, asd2.attribute_value, al.id
             """
 
-    with engine.begin() as connection:
-        try:
-            data = pd.read_sql(query, con=connection)
+    # with engine.begin() as connection:
+    #     try:
+    #         data = pd.read_sql(query, con=connection)
+    #
+    #         if data is None:
+    #             logger.error("accounts database error")
+    #             return ''
+    #         elif data.shape[0] == 0:
+    #             logger.info("non-existent account")
+    #             return ''
+    #         else:
+    #             data = data.drop_duplicates(subset=['client_id', 'client_secret'], keep='first')
+    #             return data['client_secret'][0]
+    #
+    #     except:
+    #         print('Нет подключения к БД')
+    #         return ''
 
-            if data is None:
-                logger.error("accounts database error")
-                return ''
-            elif data.shape[0] == 0:
-                logger.info("non-existent account")
-                return ''
-            else:
-                data = data.drop_duplicates(subset=['client_id', 'client_secret'], keep='first')
-                return data['client_secret'][0]
+    with engine.connect() as connection:
+        with connection.begin() as transaction:
+            try:
+                data = pd.read_sql(query, con=connection)
 
-        except:
-            print('Нет подключения к БД')
-            return ''
+                if data is None:
+                    logger.error("accounts database error")
+                    return ''
+                elif data.shape[0] == 0:
+                    logger.info("no data")
+                    return ''
+                else:
+                    data = data.drop_duplicates(subset=['client_id', 'client_secret'], keep='first')
+                    return data['client_secret'][0]
+
+            except (exc.DBAPIError, exc.SQLAlchemyError):
+                logger.error("db error")
+                transaction.rollback()
+                raise
+
+            except BaseException as ex:
+                logger.error(f"get tok: {ex}")
+                transaction.rollback()
+                raise
+
+            finally:
+                connection.close()
 
 
